@@ -1,3 +1,6 @@
+import inspect
+import os
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 import time
@@ -24,6 +27,9 @@ class Yandex(WebDriver):
         self.driver.get(self.registerPage)
         try:
             self.wait_until_page_loaded()
+            if self.get_element(By.CLASS_NAME, 'lg-cc__button_type_action') is not None:
+                self.get_element(By.CSS_SELECTOR, '.lg-cc__button_type_action').click()
+                self.wait_element(By.CSS_SELECTOR, 'a[href^="https://passport.yandex.com/registration"]')
             self.get_element(By.CSS_SELECTOR, 'a[href^="https://passport.yandex.com/registration"]').click()
             self.wait_until_page_loaded()
 
@@ -167,6 +173,10 @@ class Yandex(WebDriver):
             self.get_element(By.CSS_SELECTOR, '.js-go-to-next-step').click()
             time.sleep(2)
             print('Yandex hesabi basariyla olusturuldu')
+            file_path = os.path.dirname(
+                os.path.abspath(inspect.getfile(inspect.currentframe()))) + '/yandexaccounts.txt'
+            with open(file_path, 'a') as file:
+                file.write(self.account.mail + '@yandex.com:' + self.account.password + '\n')
 
         except NoSuchElementException:
             pass

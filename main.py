@@ -4,5 +4,5 @@ from account import Account
 account = Account()
 account.generate_account()
 
-yandex = Yandex(account, '2capthca-api-key')
+yandex = Yandex(account, open("2captcha.apikey").read())
 yandex.create_account()

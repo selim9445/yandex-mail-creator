@@ -1,0 +1,6 @@
+.venv
+*.apikey
+chromedriver
+yandexaccounts.txt
+.vscode
+*.pyc

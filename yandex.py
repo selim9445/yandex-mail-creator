@@ -27,13 +27,15 @@ class Yandex(WebDriver):
         self.driver.get(self.registerPage)
         try:
             self.wait_until_page_loaded()
-            if self.get_element(By.CLASS_NAME, 'lg-cc__button_type_action') is not None:
-                self.get_element(By.CSS_SELECTOR, '.lg-cc__button_type_action').click()
-                self.wait_element(By.CSS_SELECTOR, 'a[href^="https://passport.yandex.com/registration"]')
-            self.get_element(By.CSS_SELECTOR, 'a[href^="https://passport.yandex.com/registration"]').click()
+            self.get_element(By.CSS_SELECTOR, "#index-page-container > div > div.HeadBanner.with-her > div > div > div.HeadBanner-ButtonsWrapper > a.control.button2.button2_view_classic.button2_size_mail-big.button2_theme_mail-action.button2_type_link.HeadBanner-Button.with-shadow").click()
             self.wait_until_page_loaded()
 
             self.get_element(By.CSS_SELECTOR, '.link_has-no-phone').click()
+            time.sleep(2)
+            try:
+                self.get_element(By.CSS_SELECTOR, '.link_has-no-phone').click()
+            except:
+                pass
             time.sleep(2)
 
             first_name_element = self.get_element(By.ID, 'firstname')
@@ -46,6 +48,10 @@ class Yandex(WebDriver):
 
             self.send_slow_key(login_element, self.account.mail)
 
+            try:
+                self.get_element(By.CSS_SELECTOR, '.link_has-no-phone').click()
+            except:
+                pass
             self.wait_until_ajax_response()
             time.sleep(1)
 
@@ -139,8 +145,14 @@ class Yandex(WebDriver):
         if self.get_element(By.CLASS_NAME, 'eula-popup__show') is None:
             pass
         else:
-            self.get_element(By.CSS_SELECTOR,
+            try:
+                self.get_element(By.CSS_SELECTOR,
+                             "#root > div > div.grid > div > main > div > div > div > form > div.form__submit > div > div.eula-popup > div > button").click()
+                self.get_element(By.CSS_SELECTOR,
                              '#root > div > div.grid > div > main > div > div > div > form > div.form__submit > div > div.eula-popup > button').click()
+            except:
+                print("exception!!!!!")
+                time.sleep(5)
 
         self.wait_until_page_loaded()
         time.sleep(2)
@@ -172,11 +184,11 @@ class Yandex(WebDriver):
             time.sleep(1)
             self.get_element(By.CSS_SELECTOR, '.js-go-to-next-step').click()
             time.sleep(2)
-            print('Yandex hesabi basariyla olusturuldu')
-            file_path = os.path.dirname(
-                os.path.abspath(inspect.getfile(inspect.currentframe()))) + '/yandexaccounts.txt'
-            with open(file_path, 'a') as file:
-                file.write(self.account.mail + '@yandex.com:' + self.account.password + '\n')
-
-        except NoSuchElementException:
+        except:
             pass
+        print('Yandex hesabi basariyla olusturuldu')
+        file_path = os.path.dirname(
+            os.path.abspath(inspect.getfile(inspect.currentframe()))) + '/yandexaccounts.txt'
+        with open(file_path, 'a') as file:
+            file.write(self.account.mail + '@yandex.com:' + self.account.password + '\n')
+
